@@ -32,56 +32,56 @@ const HomePage: NextPage = () => {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2}>
-            <Grid container spacing={2}>
-              <Grid item xs={6} md={4}>
-                <img alt="my image" src="./teamPhoto.jpg" />
-              </Grid>
-              <Grid item xs={6} md={8} height={291}>
-                <Item>
-                  <Typography variant="h4">
-                    WiFinder Project
-                  </Typography>
-                  <Typography variant="h6">
-                    From Left to Right Developed By:
-                  </Typography>
-                  <br /><br />
-                  <Typography variant="h6">
-                    Zach Goodwin, Parker Carson, Kevin Wenger, Ryan McKinley, & Kaiden McGraw
-                  </Typography>
-                  <Typography height={111}> </Typography>
-                </Item>
-              </Grid>
-            </Grid>
-            </Box>
-            <Box sx={{ flexGrow: 1 }} p={6} paddingTop={2}>
-            <Grid container spacing={2}>
-              <Grid item xs={6} md={4}>
-                <Item>
-                  <Typography variant='h6'>Login Page</Typography>
-                  <br />
-                  <Typography>{loginMessage}</Typography>
-                  <Typography height={178}> </Typography>
-                </Item>
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <Item>
-                  <Typography variant='h6'>Flight Path Page</Typography>
-                  <br />
-                  <Typography>{flightPathMessage}</Typography>
-                  <Typography height={130}></Typography>
-                </Item>
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <Item>
-                  <Typography variant='h6'>Heat Map Page</Typography>
-                  <br />
-                  <Typography>{heatMapMessage}</Typography>
-                  <Typography height={178}></Typography>
-                </Item>
-              </Grid>
-            </Grid>
-          </Box>
-        </ThemeProvider>
+        <Grid container spacing={2}>
+          <Grid item xs={6} md={4}>
+            <img alt="my image" src="./teamPhoto.jpg" />
+          </Grid>
+          <Grid item xs={6} md={8} height={291}>
+            <Item>
+              <Typography variant="h4">
+                WiFinder Project
+              </Typography>
+              <Typography variant="h6">
+                From Left to Right Developed By:
+              </Typography>
+              <br /><br />
+              <Typography variant="h6">
+                Zach Goodwin, Parker Carson, Kevin Wenger, Ryan McKinley, & Kaiden McGraw
+              </Typography>
+              <Typography height={111}> </Typography>
+            </Item>
+          </Grid>
+        </Grid>
+      </Box>
+      <Box sx={{ flexGrow: 1 }} p={6} paddingTop={2}>
+        <Grid container spacing={2}>
+          <Grid item xs={6} md={4}>
+            <Item>
+              <Typography variant='h6'>Login Page</Typography>
+              <br />
+              <Typography>{loginMessage}</Typography>
+              <Typography height={178}> </Typography>
+            </Item>
+          </Grid>
+          <Grid item xs={6} md={4}>
+            <Item>
+              <Typography variant='h6'>Flight Path Page</Typography>
+              <br />
+              <Typography>{flightPathMessage}</Typography>
+              <Typography height={130}></Typography>
+            </Item>
+          </Grid>
+          <Grid item xs={6} md={4}>
+            <Item>
+              <Typography variant='h6'>Heat Map Page</Typography>
+              <br />
+              <Typography>{heatMapMessage}</Typography>
+              <Typography height={178}></Typography>
+            </Item>
+          </Grid>
+        </Grid>
+      </Box>
+    </ThemeProvider>
   );
 };
 
