@@ -17,6 +17,9 @@ const Navbar = () => {
           <li>
             <Link href="/heat-map">Heat Map</Link>
           </li>
+          <li>
+            <Link href="/login">Login</Link>
+          </li>
         </ul>
       </div>
     </div>

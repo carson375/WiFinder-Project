@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
+import { useRouter } from 'next/router'
 import * as React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Button, Box, Paper, Grid, Typography } from '@mui/material';
@@ -26,6 +27,8 @@ let theme = createTheme({
 const flightPathPageMessage = 'Welcome to the Flight Path Page! Enter your desired flight path into the interactive map below, using the path button. Add barriers and checkpoints to make your path more accurate, and once you are finished click the submit button. If there are any mistakes click the clear button to restart. Once the path has been submitted turn your drone on outdoors and watch the drone follow the path.';
 
 const FlightPathPage: NextPage = () => {
+  const navigate = useRouter();
+
   return (
     <ThemeProvider theme={theme}>
         <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2}>
@@ -85,6 +88,7 @@ const FlightPathPage: NextPage = () => {
                     variant="contained" 
                     onClick={() => {
                     console.log("Submit Button Clicked");
+                    navigate.push('/');
                   }}>
                 Submit
               </Button>
