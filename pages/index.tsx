@@ -1,7 +1,8 @@
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import * as React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { useRouter } from 'next/router'
+import { ThemeProvider, createTheme, PaletteColorOptions } from '@mui/material/styles';
 import { Button, Box, Paper, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -18,7 +19,7 @@ let theme = createTheme({
     primary: {
       main: '#00ff00',
       dark: '#0fff00',
-      light: '01fff0',
+      light: '01fff0'
     },
   },
 });
@@ -29,6 +30,8 @@ const heatMapMessage = 'After the drone has finished the desired flight path nav
 
 
 const HomePage: NextPage = () => {
+  const navigate = useRouter();
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2}>
@@ -60,7 +63,15 @@ const HomePage: NextPage = () => {
               <Typography variant='h6'>Login Page</Typography>
               <br />
               <Typography>{loginMessage}</Typography>
-              <Typography height={178}> </Typography>
+              <Typography height={121}> </Typography>
+              <Button 
+                    variant="contained"
+                    onClick={() => {
+                    navigate.push('/login');
+                  }}>
+              Login Page
+              </Button>
+              <Typography height={20}> </Typography>
             </Item>
           </Grid>
           <Grid item xs={6} md={4}>
@@ -68,7 +79,16 @@ const HomePage: NextPage = () => {
               <Typography variant='h6'>Flight Path Page</Typography>
               <br />
               <Typography>{flightPathMessage}</Typography>
-              <Typography height={130}></Typography>
+              <Typography height={73}></Typography>
+              <Button 
+                    variant="contained"
+                    sx={{ color: 'black'}}
+                    onClick={() => {
+                    navigate.push('/flight-path');
+                  }}>
+              Flight Path Page
+              </Button>
+              <Typography height={20}></Typography>
             </Item>
           </Grid>
           <Grid item xs={6} md={4}>
@@ -76,7 +96,15 @@ const HomePage: NextPage = () => {
               <Typography variant='h6'>Heat Map Page</Typography>
               <br />
               <Typography>{heatMapMessage}</Typography>
-              <Typography height={178}></Typography>
+              <Typography height={121}> </Typography>
+              <Button 
+                    variant="contained" 
+                    onClick={() => {
+                    navigate.push('/heat-map');
+                  }}>
+              Heat Map Page
+              </Button>
+              <Typography height={20}> </Typography>
             </Item>
           </Grid>
         </Grid>
