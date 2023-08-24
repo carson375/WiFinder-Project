@@ -49,15 +49,14 @@ const LoginPage: NextPage = () => {
 
   return (
     <ThemeProvider theme={theme}>
-        <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1}>
+        <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1} paddingTop={20}>
             <Grid container spacing={2}>
-                <Grid item xs={6} md={5} height={100} />
+                <Grid item xs={6} md={5.35} height={100} />
                 <Grid item xs={6} md={2} height={100} color="white">
                     <Typography variant="h4" color="black">
-                      Login Page
+                      Login
                     </Typography>
                 </Grid>
-                <Grid item xs={6} md={5} height={100} />
             </Grid>
         </Box>
         <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={1}>

@@ -1,27 +1,27 @@
 [
     {
         "userId": "1",
-        "username": "Parker",
-        "password": "Carson"
+        "username": "parker",
+        "password": "carson"
     },
     {
         "userId": "2",
-        "username": "Zach",
-        "password": "Goodwin"
+        "username": "zach",
+        "password": "goodwin"
     },
     {
         "userId": "3",
-        "username": "Ryan",
-        "password": "McKinley"
+        "username": "ryan",
+        "password": "mckinley"
     },
     {
         "userId": "4",
-        "username": "Kevin",
-        "password": "Wenger"
+        "username": "kevin",
+        "password": "wenger"
     },
     {
         "userId": "5",
-        "username": "Kaiden",
-        "password": "McGraw"
+        "username": "kaiden",
+        "password": "mcgraw"
     }
 ]
