@@ -72,11 +72,28 @@ const LoginPage: NextPage = () => {
         <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={1}>
           <Grid container spacing={2}>
             <Grid item xs={6} md={5.35} />
-            <Grid item xs={6} md={1}>
+            <Grid item xs={6} md={4}>
                 <Button variant="contained" onClick={onSubmitHandler}>Submit</Button>
             </Grid>
           </Grid>
-        </Box>    
+        </Box>
+        <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={1}>
+          <Grid container spacing={2}>
+            <Grid item xs={6} md={4.5} />
+            <Grid item xs={6} md={5}>
+              <Typography>Dont have an account? Create one below!</Typography>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={.5}>
+          <Grid container spacing={2}>
+            <Grid item xs={6} md={5} />
+            <Grid item xs={6} md={5}>
+              <Button variant="contained" onClick={() => {navigate.push('/create-account')}}>Create Account</Button>
+            </Grid>
+          </Grid>
+        </Box>   
+
     </ThemeProvider>
   );
 };
