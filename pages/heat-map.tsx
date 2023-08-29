@@ -4,6 +4,7 @@ import * as React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Button, Box, Paper, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import Mapbox from '../components/Mapbox';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#999999',
@@ -37,6 +38,13 @@ const HeatMapPage: NextPage = () => {
                     </Item>
                 </Grid>
             </Grid>
+        </Box>
+        <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2}>
+          <Grid container spacing={2}>
+            <Grid item xs={6} md={12} height={400}>
+              <Mapbox />
+            </Grid>
+          </Grid>
         </Box>
     </ThemeProvider>
   );
