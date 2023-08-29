@@ -1,15 +1,14 @@
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import wifiData from "../testData/testWifi.json";
+
 import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiY2Fyc29uMzc1IiwiYSI6ImNsbHdsdGxqdjB0MnUzcG9iYmlucjZmbDQifQ.-tQZS7qUZJNMIiLm_kD0rA";
 
-export default function Mapbox() {
+export default function Mapbox({ mapData }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [mapCreated, setMapCreated] = useState(false);
   const [lng, setLng] = useState(-83.012492);
   const [lat, setLat] = useState(39.999197);
   const [zoom, setZoom] = useState(12);
@@ -26,7 +25,7 @@ export default function Mapbox() {
     map.current.on("load", () => {
       map.current.addSource("wifi", {
         type: "geojson",
-        data: wifiData,
+        data: mapData,
       });
       // add heatmap layer here
       map.current.addLayer(
