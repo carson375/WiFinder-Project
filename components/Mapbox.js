@@ -153,18 +153,18 @@ export default function Mapbox({ mapData }) {
         .addTo(map.current);
     });
 
-    // map.current.on("move", () => {
-    //   setLng(map.current.getCenter().lng.toFixed(4));
-    //   setLat(map.current.getCenter().lat.toFixed(4));
-    //   setZoom(map.current.getZoom().toFixed(2));
-    // });
+    map.current.on("move", () => {
+      setLng(map.current.getCenter().lng.toFixed(4));
+      setLat(map.current.getCenter().lat.toFixed(4));
+      setZoom(map.current.getZoom().toFixed(2));
+    });
   });
 
   return (
     <div>
-      {/* <div className="sidebar">
+      <div className="sidebar">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-      </div> */}
+      </div>
       <div ref={mapContainer} className="map-container" />
     </div>
   );
