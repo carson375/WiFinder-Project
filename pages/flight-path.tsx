@@ -105,7 +105,7 @@ const FlightPathPage: NextPage = () => {
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2}>
         <Grid container spacing={2}>
           <Grid item xs={6} md={12} height={400}>
-            <FlightPath />
+            <FlightPath parentName="flight-path" />
           </Grid>
         </Grid>
       </Box>

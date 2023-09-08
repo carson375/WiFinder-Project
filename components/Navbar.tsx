@@ -4,7 +4,9 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
-        <Link className="btn btn-ghost normal-case text-xl" href="/">WiFinder</Link>
+        <Link className="btn btn-ghost normal-case text-xl" href="/">
+          WiFinder
+        </Link>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
@@ -16,6 +18,9 @@ const Navbar = () => {
           </li>
           <li>
             <Link href="/login">Login</Link>
+          </li>
+          <li>
+            <Link href="/profile">Profile</Link>
           </li>
         </ul>
       </div>

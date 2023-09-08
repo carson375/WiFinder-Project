@@ -1,7 +1,7 @@
 [
     {
         "type": "FeatureCollection",
-        "crs": { "type": "flight1", "properties": { "name": "flight1" } },
+        "crs": { "type": "flight1", "properties": { "name": "flight1", "date": "08/20/2023", "number": "1", "user": "user1" } },
         "features": [
             { "type": "Feature", "properties": { "id": "user1", "db": 2.3 }, "geometry": { "type": "Point", "coordinates": [-83.012492, 39.999197, 0.0 ] } },
             { "type": "Feature", "properties": { "id": "user1", "db": 2.5 }, "geometry": { "type": "Point", "coordinates": [-83.0149, 39.9992, 0.0 ] } },
@@ -17,7 +17,7 @@
     },
     {
         "type": "FeatureCollection",
-        "crs": { "type": "flight2", "properties": { "name": "flight2" } },
+        "crs": { "type": "flight2", "properties": { "name": "flight2", "date": "08/28/2023", "number": "2", "user": "user1" } },
         "features": [
             { "type": "Feature", "properties": { "id": "user1", "db": 3.3 }, "geometry": { "type": "Point", "coordinates": [-83.0123, 39.9991, 0.0 ] } },
             { "type": "Feature", "properties": { "id": "user1", "db": 5.5 }, "geometry": { "type": "Point", "coordinates": [-83.0145, 39.9992, 0.0 ] } },
