@@ -16,11 +16,25 @@ import {
   TableRow,
 } from "@mui/material";
 import * as React from "react";
+import { JsonArray, download } from "json-to-csv-in-browser";
 
 export default function ProfileTable({ wifiData }) {
-  const onDownloadHandler = (wifiData) => {
-    console.log(wifiData);
+  const onDownloadHandler = (wifiData, name) => {
+    let dataArray = [];
+    wifiData.map((item) =>
+      dataArray.push({
+        longitude: item.geometry.coordinates[0],
+        latitude: item.geometry.coordinates[1],
+        height: item.geometry.coordinates[2],
+        "wifi strength (db)": item.properties.db,
+      })
+    );
+    const jsonArray = new JsonArray(dataArray);
+    const str = jsonArray.convertToCSVstring();
+    download(`${name}.csv`, str);
   };
+
+  const onDataLoader = (wifiData) => {};
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -34,7 +48,7 @@ export default function ProfileTable({ wifiData }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {wifiData.map((item, index) => (
+          {wifiData.map((item) => (
             <TableRow
               key={item.crs.properties.number}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -49,7 +63,7 @@ export default function ProfileTable({ wifiData }) {
                 <Button
                   variant="contained"
                   onClick={() => {
-                    onDownloadHandler(wifiData[index]);
+                    onDownloadHandler(item.features, item.crs.properties.name);
                   }}
                   style={{
                     maxWidth: "100px",
