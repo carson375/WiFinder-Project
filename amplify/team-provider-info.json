@@ -10,6 +10,11 @@
       "StackName": "amplify-wifinderproject-dev-134007",
       "StackId": "arn:aws:cloudformation:us-east-1:464779843535:stack/amplify-wifinderproject-dev-134007/95729f50-525c-11ee-aa40-1274dd5e1439",
       "AmplifyAppId": "d2u887n8j1vca6"
+    },
+    "categories": {
+      "auth": {
+        "wifinderproject07473de4": {}
+      }
     }
   }
 }
