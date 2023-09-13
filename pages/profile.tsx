@@ -39,7 +39,34 @@ const ProfilePage: NextPage = () => {
           </Grid>
         </Grid>
       </Box>
-      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1} paddingTop={5}>
+      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={0} paddingTop={0}>
+        <Grid container spacing={2}>
+          <Grid item xs={6} md={2.9} />
+          <Grid item xs={6} md={4.92} height={100} color="white">
+            <Typography color="black">
+              Need To Add Flight Data? Upload Here:{" "}
+            </Typography>
+          </Grid>
+          <Grid item xs={6} md={2} height={100} color="white">
+            <Button
+              variant="contained"
+              // onClick={() => {
+              //   console.log("Hello");
+              // }}
+              style={{
+                maxWidth: "100px",
+                maxHeight: "56px",
+                minWidth: "100px",
+                minHeight: "56px",
+              }}
+            >
+              Upload
+              <input type="file" hidden />
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1} paddingTop={0}>
         <Grid container spacing={2}>
           <Grid item xs={6} md={2.9} />
           <Grid item xs={6} md={2} height={300} minWidth={700} color="white">
