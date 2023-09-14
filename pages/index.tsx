@@ -1,3 +1,7 @@
+import "../styles/globals.css";
+import awsExports from "../src/aws-exports";
+import { Amplify } from 'aws-amplify';
+Amplify.configure({...awsExports, ssr: true });
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import * as React from 'react';
