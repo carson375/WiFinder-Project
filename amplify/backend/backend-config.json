@@ -13,6 +13,22 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
+    },
+    "wifinderproject": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
     }
   },
   "auth": {
@@ -46,6 +62,24 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_wifinderproject2a9717bf_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "wifinderproject2a9717bf"
+        }
+      ]
+    },
+    "AMPLIFY_function_wifinderproject2a9717bf_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "wifinderproject2a9717bf"
+        }
+      ]
     }
   }
 }

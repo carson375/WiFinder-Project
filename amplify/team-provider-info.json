@@ -16,7 +16,13 @@
         "wifinderproject07473de4": {}
       },
       "function": {
-        "wifinderproject2a9717bf": {}
+        "wifinderproject2a9717bf": {
+          "deploymentBucketName": "amplify-wifinderproject-dev-134007-deployment",
+          "s3Key": "amplify-builds/wifinderproject2a9717bf-34396861446a3773717a-build.zip"
+        }
+      },
+      "api": {
+        "api63b222e3": {}
       }
     }
   }
