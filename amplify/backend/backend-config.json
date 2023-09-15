@@ -65,5 +65,12 @@
         }
       ]
     }
+  },
+  "storage": {
+    "s3wifinderprojectstorage0b006b33": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
   }
 }

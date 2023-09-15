@@ -25,5 +25,11 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     }
+  },
+  "storage": {
+    "s3wifinderprojectstorage0b006b33": {
+      "BucketName": "string",
+      "Region": "string"
+    }
   }
 }

@@ -1,0 +1,11 @@
+{
+  "resourceName": "s3wifinderprojectstorage0b006b33",
+  "bucketName": "wifinderproject-storage-0b006b33",
+  "policyUUID": "5b0f8352",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ]
+}
