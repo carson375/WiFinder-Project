@@ -1,0 +1,29 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-wifinderproject-dev-134007-authRole",
+      "UnauthRoleArn": "arn:aws:iam::464779843535:role/amplify-wifinderproject-dev-134007-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::464779843535:role/amplify-wifinderproject-dev-134007-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-wifinderproject-dev-134007-deployment",
+      "UnauthRoleName": "amplify-wifinderproject-dev-134007-unauthRole",
+      "StackName": "amplify-wifinderproject-dev-134007",
+      "StackId": "arn:aws:cloudformation:us-east-1:464779843535:stack/amplify-wifinderproject-dev-134007/95729f50-525c-11ee-aa40-1274dd5e1439",
+      "AmplifyAppId": "d2u887n8j1vca6"
+    },
+    "categories": {
+      "auth": {
+        "wifinderproject07473de4": {}
+      },
+      "function": {
+        "wifinderproject2a9717bf": {
+          "deploymentBucketName": "amplify-wifinderproject-dev-134007-deployment",
+          "s3Key": "amplify-builds/wifinderproject2a9717bf-34396861446a3773717a-build.zip"
+        }
+      },
+      "api": {
+        "api63b222e3": {}
+      }
+    }
+  }
+}

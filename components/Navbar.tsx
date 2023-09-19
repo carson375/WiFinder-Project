@@ -1,6 +1,14 @@
 import Link from "next/link";
 import React from "react";
+import { Auth } from "aws-amplify";
+import { useState } from "react";
+
 const Navbar = () => {
+  const [userName, setUserName] = useState();
+  Auth.currentUserInfo().then((userInfo) => {
+    setUserName(userInfo.username);
+  });
+
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
@@ -17,7 +25,7 @@ const Navbar = () => {
             <Link href="/heat-map">Heat Map</Link>
           </li>
           <li>
-            <Link href="/login">Login</Link>
+            <Link href="/flight-data">Flight Data</Link>
           </li>
           <li>
             <Link href="/profile">Profile</Link>

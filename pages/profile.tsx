@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Button, Box, Paper, Grid, Typography, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import wifiData from "../testData/testWifi.json";
+import testDatabase from "../testData/testDatabase.json";
 import { useState } from "react";
-import ProfileTable from "../components/ProfileTable";
+import { Auth } from "aws-amplify";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#999999",
@@ -26,51 +26,107 @@ let theme = createTheme({
   },
 });
 
-const ProfilePage: NextPage = () => {
+const Profile: NextPage = () => {
+  const navigate = useRouter();
+
+  const [userName, setUserName] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [changePassword, setChangePassword] = useState(false);
+
+  Auth.currentUserInfo().then((userInfo) => {
+    setUserName(userInfo.username);
+    console.log(userInfo.username);
+  });
+
+  const changePasswordHandler = () => {
+    Auth.currentAuthenticatedUser()
+      .then((user) => {
+        Auth.changePassword(user, oldPassword, newPassword);
+        alert("Password has been updated!");
+        window.location.reload();
+      })
+      .catch((e) => {
+        alert("Password update failed please try again.");
+      });
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={0} paddingTop={20}>
+      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1} paddingTop={20}>
         <Grid container spacing={2}>
-          <Grid item xs={6} md={5} height={100} />
-          <Grid item xs={6} md={2} height={100} color="white">
+          <Grid item xs={6} md={4.5} height={100} />
+          <Grid item xs={6} md={4} height={100} color="white">
             <Typography variant="h4" color="black">
-              Profile Page
+              Welcome {userName}
             </Typography>
           </Grid>
         </Grid>
       </Box>
-      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={0} paddingTop={0}>
+      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={1}>
         <Grid container spacing={2}>
-          <Grid item xs={6} md={2.9} />
-          <Grid item xs={6} md={4.92} height={100} color="white">
-            <Typography color="black">
-              Need To Add Flight Data? Upload Here:{" "}
-            </Typography>
-          </Grid>
-          <Grid item xs={6} md={2} height={100} color="white">
+          <Grid item xs={6} md={5} />
+          <Grid item xs={6} md={4}>
             <Button
               variant="contained"
-              // onClick={() => {
-              //   console.log("Hello");
-              // }}
-              style={{
-                maxWidth: "100px",
-                maxHeight: "56px",
-                minWidth: "100px",
-                minHeight: "56px",
+              onClick={() => {
+                setChangePassword(true);
               }}
             >
-              Upload
-              <input type="file" hidden />
+              Change Password
             </Button>
           </Grid>
         </Grid>
       </Box>
-      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1} paddingTop={0}>
+      {changePassword && userName !== "" && (
+        <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={1}>
+          <Grid container spacing={2}>
+            <Grid item xs={6} md={4.5} />
+            <Grid item xs={6} md={2.7}>
+              <TextField
+                variant="outlined"
+                label="Old Password"
+                fullWidth
+                margin="normal"
+                type="password"
+                onChange={(e) => setOldPassword(e.target.value)}
+              />
+              <TextField
+                variant="outlined"
+                label="New Password"
+                fullWidth
+                type="password"
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} paddingTop={1}>
+            <Grid item xs={6} md={4.75} />
+            <Grid item xs={6} md={2.7}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  changePasswordHandler();
+                }}
+              >
+                Submit Password Change
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      )}
+      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={1}>
         <Grid container spacing={2}>
-          <Grid item xs={6} md={2.9} />
-          <Grid item xs={6} md={2} height={300} minWidth={700} color="white">
-            <ProfileTable wifiData={wifiData} />
+          <Grid item xs={6} md={5.32} />
+          <Grid item xs={6} md={4}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                Auth.signOut();
+              }}
+            >
+              Sign Out
+            </Button>
           </Grid>
         </Grid>
       </Box>
@@ -78,4 +134,4 @@ const ProfilePage: NextPage = () => {
   );
 };
 
-export default ProfilePage;
+export default Profile;

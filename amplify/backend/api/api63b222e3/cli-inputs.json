@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/items": {
+      "name": "/items",
+      "lambdaFunction": "wifinderproject2a9717bf",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

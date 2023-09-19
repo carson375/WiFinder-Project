@@ -1,0 +1,87 @@
+import { NextPage } from "next";
+import * as React from "react";
+import { useRouter } from "next/router";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { Button, Box, Paper, Grid, Typography, TextField } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import wifiData from "../testData/testWifi.json";
+import { useState } from "react";
+import ProfileTable from "../components/ProfileTable";
+import { Auth } from "aws-amplify";
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#999999",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
+
+let theme = createTheme({
+  palette: {
+    primary: {
+      main: "#00ff00",
+      dark: "#0fff00",
+      light: "01fff0",
+    },
+  },
+});
+
+const FlightData: NextPage = () => {
+  const [userName, setUserName] = useState();
+  Auth.currentUserInfo().then((userInfo) => {
+    setUserName(userInfo.username);
+  });
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={0} paddingTop={20}>
+        <Grid container spacing={2}>
+          <Grid item xs={6} md={5} height={100} />
+          <Grid item xs={6} md={2} height={100} color="white">
+            <Typography variant="h4" color="black">
+              Flight Data
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
+      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={0} paddingTop={0}>
+        <Grid container spacing={2}>
+          <Grid item xs={6} md={2.9} />
+          <Grid item xs={6} md={4.92} height={100} color="white">
+            <Typography color="black">
+              Need To Add Flight Data? Upload Here:{" "}
+            </Typography>
+          </Grid>
+          <Grid item xs={6} md={2} height={100} color="white">
+            <Button
+              variant="contained"
+              // onClick={() => {
+              //   console.log("Hello");
+              // }}
+              style={{
+                maxWidth: "100px",
+                maxHeight: "56px",
+                minWidth: "100px",
+                minHeight: "56px",
+              }}
+            >
+              Upload
+              <input type="file" hidden />
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1} paddingTop={0}>
+        <Grid container spacing={2}>
+          <Grid item xs={6} md={2.9} />
+          <Grid item xs={6} md={2} height={300} minWidth={700} color="white">
+            <ProfileTable wifiData={wifiData} />
+          </Grid>
+        </Grid>
+      </Box>
+    </ThemeProvider>
+  );
+};
+
+export default FlightData;
