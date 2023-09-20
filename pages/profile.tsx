@@ -54,9 +54,8 @@ const Profile: NextPage = () => {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1} paddingTop={20}>
-        <Grid container spacing={2}>
-          <Grid item xs={6} md={4.5} height={100} />
-          <Grid item xs={6} md={4} height={100} color="white">
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item height={100} color="white">
             <Typography variant="h4" color="black">
               Welcome {userName}
             </Typography>
@@ -64,25 +63,21 @@ const Profile: NextPage = () => {
         </Grid>
       </Box>
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={1}>
-        <Grid container spacing={2}>
-          <Grid item xs={6} md={5} />
-          <Grid item xs={6} md={4}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setChangePassword(true);
-              }}
-            >
-              Change Password
-            </Button>
-          </Grid>
+        <Grid container spacing={0} justifyContent="center">
+          <Button
+            variant="contained"
+            onClick={() => {
+              setChangePassword(true);
+            }}
+          >
+            Change Password
+          </Button>
         </Grid>
       </Box>
       {changePassword && userName !== "" && (
         <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={1}>
-          <Grid container spacing={2}>
-            <Grid item xs={6} md={4.5} />
-            <Grid item xs={6} md={2.7}>
+          <Grid container spacing={0} justifyContent="center">
+            <Grid item>
               <TextField
                 variant="outlined"
                 label="Old Password"
@@ -100,34 +95,28 @@ const Profile: NextPage = () => {
               />
             </Grid>
           </Grid>
-          <Grid container spacing={2} paddingTop={1}>
-            <Grid item xs={6} md={4.75} />
-            <Grid item xs={6} md={2.7}>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  changePasswordHandler();
-                }}
-              >
-                Submit Password Change
-              </Button>
-            </Grid>
+          <Grid container spacing={0} paddingTop={1} justifyContent="center">
+            <Button
+              variant="contained"
+              onClick={() => {
+                changePasswordHandler();
+              }}
+            >
+              Submit Password Change
+            </Button>
           </Grid>
         </Box>
       )}
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={1}>
-        <Grid container spacing={2}>
-          <Grid item xs={6} md={5.32} />
-          <Grid item xs={6} md={4}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                Auth.signOut();
-              }}
-            >
-              Sign Out
-            </Button>
-          </Grid>
+        <Grid container spacing={0} justifyContent="center">
+          <Button
+            variant="contained"
+            onClick={() => {
+              Auth.signOut();
+            }}
+          >
+            Sign Out
+          </Button>
         </Grid>
       </Box>
     </ThemeProvider>

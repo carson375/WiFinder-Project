@@ -7,6 +7,8 @@ import { styled } from "@mui/material/styles";
 import wifiData from "../testData/testWifi.json";
 import { useState } from "react";
 import ProfileTable from "../components/ProfileTable";
+// @ts-nocheck
+import Papa from "papaparse";
 import { Auth } from "aws-amplify";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -28,17 +30,34 @@ let theme = createTheme({
 });
 
 const FlightData: NextPage = () => {
-  const [userName, setUserName] = useState();
-  Auth.currentUserInfo().then((userInfo) => {
-    setUserName(userInfo.username);
-  });
+  const [file, setFile] = useState<File>();
+  const fileReader = new FileReader();
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const tempFile = e.target.files?.[0];
+    tempFile ? setFile(tempFile) : alert("Not a valid file");
+  };
+
+  const onFileParse = () => {
+    fileReader.onload = async ({ target }) => {
+      const csv = Papa.parse(target?.result as any);
+      const data = csv?.data;
+      console.log(data);
+    };
+    fileReader.readAsText(file as Blob);
+  };
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={0} paddingTop={20}>
-        <Grid container spacing={2}>
-          <Grid item xs={6} md={5} height={100} />
-          <Grid item xs={6} md={2} height={100} color="white">
+      <Box
+        sx={{ flexGrow: 1 }}
+        p={6}
+        paddingBottom={0}
+        paddingTop={20}
+        justifyContent="center"
+      >
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item height={100} color="white">
             <Typography variant="h4" color="black">
               Flight Data
             </Typography>
@@ -46,19 +65,21 @@ const FlightData: NextPage = () => {
         </Grid>
       </Box>
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={0} paddingTop={0}>
-        <Grid container spacing={2}>
-          <Grid item xs={6} md={2.9} />
-          <Grid item xs={6} md={4.92} height={100} color="white">
-            <Typography color="black">
-              Need To Add Flight Data? Upload Here:{" "}
-            </Typography>
-          </Grid>
-          <Grid item xs={6} md={2} height={100} color="white">
+        <Grid
+          container
+          spacing={0}
+          justifyContent="center"
+          alignItems="center"
+          direction="row"
+        >
+          <Grid item height={120}>
+            <Typography color="black">Upload Flight Data:</Typography>
+            <input type={"file"} accept={".csv"} onChange={onFileChange} />
             <Button
               variant="contained"
-              // onClick={() => {
-              //   console.log("Hello");
-              // }}
+              onClick={() => {
+                onFileParse();
+              }}
               style={{
                 maxWidth: "100px",
                 maxHeight: "56px",
@@ -73,8 +94,7 @@ const FlightData: NextPage = () => {
         </Grid>
       </Box>
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1} paddingTop={0}>
-        <Grid container spacing={2}>
-          <Grid item xs={6} md={2.9} />
+        <Grid container spacing={2} justifyContent="center">
           <Grid item xs={6} md={2} height={300} minWidth={700} color="white">
             <ProfileTable wifiData={wifiData} />
           </Grid>
