@@ -10,6 +10,7 @@ import ProfileTable from "../components/ProfileTable";
 // @ts-nocheck
 import Papa from "papaparse";
 import { Auth } from "aws-amplify";
+import { CreateTableEndpoint } from "../back-end/DynamoCreateTable";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#999999",
@@ -97,6 +98,26 @@ const FlightData: NextPage = () => {
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={6} md={2} height={300} minWidth={700} color="white">
             <ProfileTable wifiData={wifiData} />
+          </Grid>
+        </Grid>
+      </Box>
+      <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1} paddingTop={0}>
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item xs={6} md={2} height={300} minWidth={700} color="white">
+            <Button
+              variant="contained"
+              onClick={() => {
+                CreateTableEndpoint();
+              }}
+              style={{
+                maxWidth: "100px",
+                maxHeight: "56px",
+                minWidth: "100px",
+                minHeight: "56px",
+              }}
+            >
+              Create Table
+            </Button>
           </Grid>
         </Grid>
       </Box>
