@@ -1,8 +1,6 @@
 // Delete or rename this file just doing this for the back-end folder
 import React, { useRef, useEffect, useState } from "react";
-
-export default function Test() {
-    console.log("Hello World");
+function Test() {
 }; 
 
 // Import the Axios library
@@ -11,6 +9,7 @@ const axios = require('axios');
 // Define the URL you want to send requests to
 const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
 
+function HeatMapGet() {
 // Heat Map: Send a GET request 
 axios.get(apiUrl)
   .then(response => {
@@ -19,7 +18,9 @@ axios.get(apiUrl)
   .catch(error => {
     console.error('GET Request Error:', error);
   });
+}
 
+function FlightTestDataPost() {
 // Flight Path Data Page: Send a POST request with data
 const postData = {
   title: 'foo',
@@ -33,7 +34,9 @@ axios.post(apiUrl, postData)
   .catch(error => {
     console.error('POST Request Error:', error);
   });
+}
 
+function FlightTestDataGet() {
   // Flight Path Data Page: Send a GET request 
 axios.get(apiUrl)
 .then(response => {
@@ -42,7 +45,9 @@ axios.get(apiUrl)
 .catch(error => {
   console.error('GET Request Error:', error);
 });
+}
 
+function FlightPathPost() {
 // Flight Path Page: Send a POST request with data
 const postData2 = {
   title: 'foo',
@@ -56,3 +61,4 @@ axios.post(apiUrl, postData2)
   .catch(error => {
     console.error('POST Request Error:', error);
   });
+}
