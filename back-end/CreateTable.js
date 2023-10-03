@@ -12,8 +12,8 @@ export const CreateTableEndpoint = async () => {
   var AWS = require("aws-sdk");
   AWS.config.update({
     region: "us-east-1",
-    accessKeyId: "AKIAWYNYJS7H4ZVUKJ4M",
-    accessSecretKey: "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",
+    accessKeyId: "XXX",
+    accessSecretKey: "XXX",
     endpoint:
       "https://us-east-1.console.aws.amazon.com/vpc/home?region=us-east-1#Endpoints:vpcEndpointId=vpce-08f60372368967ead",
   });
