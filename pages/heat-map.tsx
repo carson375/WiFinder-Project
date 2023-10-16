@@ -24,6 +24,9 @@ import { styled } from "@mui/material/styles";
 import Mapbox from "../components/Mapbox";
 import wifiData from "../testData/testWifi.json";
 import FlightPath from "components/FlightPath";
+// @ts-nocheck
+import Papa from "papaparse";
+import { Auth } from "aws-amplify";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#999999",
@@ -46,10 +49,73 @@ let theme = createTheme({
 const HeatMapPage: NextPage = () => {
   const [dataIndex, setDataIndex] = useState<number>(0);
   const [isRender, setIsRender] = useState(false);
+  const [file, setFile] = useState<File>();
+  const fileReader = new FileReader();
+  const [userName, setUserName] = useState("");
+  const [heatMapOptions, setHeatMapOptions] = useState(wifiData);
+  const date = new Date();
+
   const onCsvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDataIndex(Number(e.target.value));
     setIsRender(true);
   };
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const tempFile = e.target.files?.[0];
+    tempFile ? setFile(tempFile) : alert("Not a valid file");
+  };
+
+  Auth.currentUserInfo().then((userInfo) => {
+    setUserName(userInfo.username);
+  });
+
+  const onFileParse = () => {
+    fileReader.onload = async ({ target }) => {
+      const csv = Papa.parse(target?.result as any);
+      const data = csv?.data;
+      wifiData.push(formatForHeatmap(data));
+      setHeatMapOptions(wifiData);
+      setDataIndex(heatMapOptions.length - 1);
+      setIsRender(true);
+    };
+    fileReader.readAsText(file as Blob);
+  };
+
+  const formatForHeatmap = (data: any) => {
+    const newJson = {
+      type: "FeatureCollection",
+      crs: {
+        type: `${file?.name}`,
+        properties: {
+          name: `${file?.name}`,
+          date: `${date.getMonth}/${date.getDate}/${date.getFullYear}`,
+          number: `${wifiData.length + 1}`,
+          user: userName,
+        },
+      },
+      features: [],
+    };
+    let dataPoints = [];
+    for (let index = 1; index < data.length - 1; index++) {
+      const tempIndex = data[index];
+      let myObj = {
+        type: "Feature",
+        properties: { id: userName, db: tempIndex[3] },
+        geometry: {
+          type: "Point",
+          coordinates: [
+            tempIndex[0],
+            tempIndex[1],
+            tempIndex[2] == "" ? 0.0 : tempIndex[2],
+          ],
+        },
+      };
+      dataPoints.push(myObj);
+    }
+    newJson.features = dataPoints as any;
+    return newJson;
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2}>
@@ -77,7 +143,7 @@ const HeatMapPage: NextPage = () => {
                   onCsvChange(e as React.ChangeEvent<HTMLInputElement>)
                 }
               >
-                {wifiData.map((item, index) => (
+                {heatMapOptions.map((item, index) => (
                   <MenuItem value={index} key={index} defaultValue={index}>
                     {item.crs.properties.name}
                   </MenuItem>
@@ -101,6 +167,30 @@ const HeatMapPage: NextPage = () => {
               Clear
             </Button>
           </Grid>
+          <Grid item xs={2} md={2}>
+            <Typography color="black">Upload Flight Data:</Typography>
+            <input type={"file"} accept={".csv"} onChange={onFileChange} />
+          </Grid>
+          <Grid item xs={2} md={2}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                onFileParse();
+              }}
+              style={{
+                maxWidth: "100px",
+                maxHeight: "56px",
+                minWidth: "100px",
+                minHeight: "56px",
+              }}
+            >
+              Upload
+              <input type="file" hidden />
+            </Button>
+          </Grid>
+          <Item>
+            <Typography variant="h2">LEGEND</Typography>
+          </Item>
         </Grid>
       </Box>
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={0.5}>
