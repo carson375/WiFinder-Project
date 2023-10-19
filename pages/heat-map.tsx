@@ -88,7 +88,7 @@ const HeatMapPage: NextPage = () => {
         type: `${file?.name}`,
         properties: {
           name: `${file?.name}`,
-          date: `${date.getMonth}/${date.getDate}/${date.getFullYear}`,
+          date: `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`,
           number: `${wifiData.length + 1}`,
           user: userName,
         },
