@@ -32,6 +32,7 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <Adafruit_MPU6050.h>
+
 void setup()
 {
   int I2C_SDA = 8;
@@ -41,6 +42,7 @@ void setup()
   Serial.begin(9600);
   while (!Serial);             // Leonardo: wait for serial monitor
   Serial.println("\nI2C Scanner");
+  
 }
  
  
