@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Users/kevin/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32s3/include/esp_common/include",
+                "C:/Users/kevin/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32s3/include/driver/include",
+                "C:/Users/kevin/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32s3/include/freertos/include",
+                "C:/Users/kevin/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32s3/include/freertos/include/esp_additions/freertos",
+                "C:/Users/kevin/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32s3/include/freertos/port/xtensa/include",
+                "C:/Users/kevin/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32s3/include/nvs_flash/include",
+                "C:/Users/kevin/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32s3/include/spi_flash/include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:/Users/kevin/.platformio/packages/toolchain-xtensa-esp32s3/bin/xtensa-esp32s3-elf-gcc.exe",
+            "cStandard": "c17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "windows-gcc-x86"
+        }
+    ],
+    "version": 4
+}
