@@ -64,7 +64,7 @@ export default function Mapbox({ mapData }) {
               ["linear"],
               ["heatmap-density"],
               -100,
-              "rgba(33,102,172,0)",
+              "rgb(33,102,172)",
               -80,
               "rgb(103,169,207)",
               -60,
@@ -74,7 +74,7 @@ export default function Mapbox({ mapData }) {
               -20,
               "rgb(239,138,98)",
               0,
-              "rgb(178,24,43)",
+              "rgba(178,24,43, 0)",
             ],
             // Adjust the heatmap radius by zoom level
             "heatmap-radius": [
