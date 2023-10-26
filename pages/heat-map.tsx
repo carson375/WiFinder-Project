@@ -82,12 +82,21 @@ const HeatMapPage: NextPage = () => {
   };
 
   const formatForHeatmap = (data: any) => {
+    const fileNameLength = file?.name.length;
     const newJson = {
       type: "FeatureCollection",
       crs: {
-        type: `${file?.name}`,
+        type: `${
+          fileNameLength
+            ? file?.name.substring(0, fileNameLength - 4)
+            : file?.name
+        }`,
         properties: {
-          name: `${file?.name}`,
+          name: `${
+            fileNameLength
+              ? file?.name.substring(0, fileNameLength - 4)
+              : file?.name
+          }`,
           date: `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`,
           number: `${wifiData.length + 1}`,
           user: userName,
