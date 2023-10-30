@@ -18,6 +18,7 @@
     "daisyui": "^2.42.1",
     "json-to-csv-in-browser": "^1.0.8",
     "mapbox-gl": "^2.15.0",
+    "mysql": "^2.18.1",
     "next": "13.0.5",
     "next-auth": "^4.17.0",
     "papaparse": "^5.4.1",
