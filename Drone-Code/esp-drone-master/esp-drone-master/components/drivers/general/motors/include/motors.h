@@ -65,10 +65,10 @@
     #define MOTOR4_GPIO  CONFIG_MOTOR04_PIN        // M4 for ESP32FC
 #endif
 
-#define MOT_PWM_CH1  4      // Motor M1 pwmchannel
-#define MOT_PWM_CH2  5      // Motor M2 pwmchannel
-#define MOT_PWM_CH3  6      // Motor M3 pwmchannel
-#define MOT_PWM_CH4  7      // Motor M4 pwmchannel     
+#define MOT_PWM_CH1  4      // Motor M1 pwmchannel was 4
+#define MOT_PWM_CH2  5      // Motor M2 pwmchannel was 5
+#define MOT_PWM_CH3  6      // Motor M3 pwmchannel was 6
+#define MOT_PWM_CH4  7      // Motor M4 pwmchannel was 7
 
 // Test defines
 #define MOTORS_TEST_RATIO         (uint16_t)(0.2*(1<<16))
@@ -147,7 +147,7 @@ typedef struct {
  */
 //extern const MotorPerifDef* motorMapNoMotors[NBR_OF_MOTORS];
 extern const MotorPerifDef *motorMapDefaultBrushed[NBR_OF_MOTORS];
-// extern const MotorPerifDef* motorMapDefaltConBrushless[NBR_OF_MOTORS];
+//extern const MotorPerifDef* motorMapDefaltConBrushless[NBR_OF_MOTORS];
 // extern const MotorPerifDef* motorMapBigQuadDeck[NBR_OF_MOTORS];
 // extern const MotorPerifDef* motorMapBoltBrushless[NBR_OF_MOTORS];
 
