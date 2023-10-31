@@ -27,6 +27,7 @@ import FlightPath from "components/FlightPath";
 // @ts-nocheck
 import Papa from "papaparse";
 import { Auth } from "aws-amplify";
+import HeatMapLegend from "components/HeatMapLegend";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#999999",
@@ -55,9 +56,21 @@ const HeatMapPage: NextPage = () => {
   const [heatMapOptions, setHeatMapOptions] = useState(wifiData);
   const date = new Date();
 
+  const colors = [
+    { value: "rgb(33,102,172)", label: "-100" },
+    { value: "rgb(103,169,207)", label: "-80" },
+    { value: "rgb(209,229,240)", label: "-60" },
+    { value: "rgb(253,219,199)", label: "-40" },
+    { value: "rgb(239,138,98)", label: "-20" },
+    { value: "rgb(178,24,43)", label: "0" },
+  ];
+
   const onCsvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDataIndex(Number(e.target.value));
     setIsRender(true);
+    console.log(e.target.value);
+    console.log(wifiData);
+    console.log(dataIndex);
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,13 +122,13 @@ const HeatMapPage: NextPage = () => {
       const tempIndex = data[index];
       let myObj = {
         type: "Feature",
-        properties: { id: userName, db: tempIndex[3] },
+        properties: { id: userName, db: Number(tempIndex[3]) },
         geometry: {
           type: "Point",
           coordinates: [
-            tempIndex[0],
-            tempIndex[1],
-            tempIndex[2] == "" ? 0.0 : tempIndex[2],
+            Number(tempIndex[0]),
+            Number(tempIndex[1]),
+            tempIndex[2] == "" ? 0.0 : Number(tempIndex[2]),
           ],
         },
       };
@@ -197,9 +210,12 @@ const HeatMapPage: NextPage = () => {
               <input type="file" hidden />
             </Button>
           </Grid>
-          <Item>
-            <Typography variant="h2">LEGEND</Typography>
-          </Item>
+          <Grid item xs={2} md={1.2}>
+            <Typography variant="h6">Legend (db):</Typography>
+          </Grid>
+          <Grid item xs={2} md={2}>
+            <HeatMapLegend colors={colors} />
+          </Grid>
         </Grid>
       </Box>
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={2} paddingTop={0.5}>
