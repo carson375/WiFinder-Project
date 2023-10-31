@@ -68,12 +68,10 @@ const HeatMapPage: NextPage = () => {
   const onCsvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDataIndex(Number(e.target.value));
     setIsRender(true);
-    console.log(e.target.value);
-    console.log(wifiData);
-    console.log(dataIndex);
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsRender(false);
     const tempFile = e.target.files?.[0];
     tempFile ? setFile(tempFile) : alert("Not a valid file");
   };
