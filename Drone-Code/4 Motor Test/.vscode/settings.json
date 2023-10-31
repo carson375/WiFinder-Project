@@ -3,5 +3,9 @@
     "idf.openOcdConfigs": [
         "board/esp32s3-bridge.cfg"
     ],
-    "idf.portWin": "COM3"
+    "idf.portWin": "COM6",
+    "files.associations": {
+        "istream": "cpp",
+        "ostream": "cpp"
+    }
 }

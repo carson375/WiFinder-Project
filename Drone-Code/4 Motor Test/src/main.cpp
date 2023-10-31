@@ -7,13 +7,13 @@
 #include "ESC.h" // RC_ESP library installed by Library Manager
 
 #define ESC_PIN1 (2) // connected to ESC control wire
-#define ESC_PIN2 (15) // connected to ESC control wire
+#define ESC_PIN2 (17) // connected to ESC control wire
 #define ESC_PIN3 (16) // connected to ESC control wire
-#define ESC_PIN4 (17) // connected to ESC control wire
+#define ESC_PIN4 (5) // connected to ESC control wire
 #define POT_PIN (13) // Analog pin used to connect the potentiometer center pin
 
 // Note: the following speeds may need to be modified for your particular hardware.
-#define MIN_SPEED 1040 // speed just slow enough to turn motor off
+#define MIN_SPEED 1000 // speed just slow enough to turn motor off
 #define MAX_SPEED 1240 // speed where my motor drew 3.6 amps at 12v.
 
 ESC myESC1 (ESC_PIN1, MIN_SPEED, MAX_SPEED, 127); // ESC_Name (PIN, Minimum Value, Maximum Value, Arm Value)
@@ -58,7 +58,7 @@ delay(10);
 void loop() {
 val = analogRead(POT_PIN); // read the pot (value between 0 and 4095 for ESP32 12 bit A to D)
 Serial.println(val);
-val = map(val, 0, 63, MIN_SPEED, MAX_SPEED); // scale pot reading to valid speed range
+val = map(val, 0, 1023, MIN_SPEED, MAX_SPEED); // scale pot reading to valid speed range
 myESC1.speed(val); // sets the ESC speed
 myESC2.speed(val); // sets the ESC speed
 myESC3.speed(val); // sets the ESC speed
