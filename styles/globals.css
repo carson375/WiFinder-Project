@@ -5,16 +5,30 @@
 .map-container {
     height: 400px;
 }
-  
+
+
 .sidebar {
-background-color: rgba(35, 55, 75, 0.9);
-color: #fff;
-padding: 6px 12px;
-font-family: monospace;
-z-index: 1;
-position: absolute;
-top: 380px;
-left: 50px;
-margin: 12px;
-border-radius: 4px;
-}
+    background-color: rgba(35, 55, 75, 0.9);
+    color: #fff;
+    padding: 6px 12px;
+    font-family: monospace;
+    z-index: 1;
+    position: relative;
+    top: 45%;
+    left: 50%;
+    margin: -12px;
+    border-radius: 4px;
+    transform: translate(-50%, -50%);
+    max-width: 407px;
+  }
+  
+.indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    font-family: Arial, sans-serif;
+    font-size: 2em;
+    color: rgb(220, 15, 15);
+  }

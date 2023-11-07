@@ -32,19 +32,73 @@ let theme = createTheme({
 const FlightData: NextPage = () => {
   const [file, setFile] = useState<File>();
   const fileReader = new FileReader();
+  const date = new Date();
+  const [userName, setUserName] = useState("");
+  const [newFile, setNewFile] = useState(false);
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tempFile = e.target.files?.[0];
     tempFile ? setFile(tempFile) : alert("Not a valid file");
+    setNewFile(false);
   };
 
   const onFileParse = () => {
     fileReader.onload = async ({ target }) => {
       const csv = Papa.parse(target?.result as any);
       const data = csv?.data;
-      console.log(data);
+      wifiData.push(formatForHeatmap(data));
+      alert("Data Successfully Uploaded!");
+      setNewFile(true);
     };
     fileReader.readAsText(file as Blob);
+  };
+
+  Auth.currentUserInfo().then((userInfo) => {
+    setUserName(userInfo.username);
+  });
+
+  const formatForHeatmap = (data: any) => {
+    const fileNameLength = file?.name.length;
+    const newJson = {
+      type: "FeatureCollection",
+      crs: {
+        type: `${
+          fileNameLength
+            ? file?.name.substring(0, fileNameLength - 4)
+            : file?.name
+        }`,
+        properties: {
+          name: `${
+            fileNameLength
+              ? file?.name.substring(0, fileNameLength - 4)
+              : file?.name
+          }`,
+          date: `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`,
+          number: `${wifiData.length + 1}`,
+          user: userName,
+        },
+      },
+      features: [],
+    };
+    let dataPoints = [];
+    for (let index = 1; index < data.length - 1; index++) {
+      const tempIndex = data[index];
+      let myObj = {
+        type: "Feature",
+        properties: { id: userName, db: Number(tempIndex[3]) },
+        geometry: {
+          type: "Point",
+          coordinates: [
+            Number(tempIndex[0]),
+            Number(tempIndex[1]),
+            tempIndex[2] == "" ? 0.0 : Number(tempIndex[2]),
+          ],
+        },
+      };
+      dataPoints.push(myObj);
+    }
+    newJson.features = dataPoints as any;
+    return newJson;
   };
 
   return (
@@ -96,7 +150,8 @@ const FlightData: NextPage = () => {
       <Box sx={{ flexGrow: 1 }} p={6} paddingBottom={1} paddingTop={0}>
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={6} md={2} height={300} minWidth={700} color="white">
-            <ProfileTable wifiData={wifiData} />
+            {newFile && <ProfileTable wifiData={wifiData} />}
+            {!newFile && <ProfileTable wifiData={wifiData} />}
           </Grid>
         </Grid>
       </Box>
