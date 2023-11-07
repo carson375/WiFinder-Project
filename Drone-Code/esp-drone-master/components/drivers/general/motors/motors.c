@@ -160,15 +160,10 @@ void motorsSetRatio(uint32_t id, uint16_t ithrust)
 #endif
         //ESP_LOGI(TAG, "Angle of rotation: %d ID number: ", ratio, id);
         
-        ratio = (ratio - 0) * (MOTORS_MAX_SPEED - MOTORS_MIN_SPEED) / (65535 - 0) + MOTORS_MIN_SPEED; //maps value to Us to use in changing speed - max in is 65535 and min is 0 mapping to 1180 and 1240
-        DEBUG_PRINT_LOCAL("value = %d id = %d", ratio, id);
-        if(ratio > SERVO_MAX_PULSEWIDTH_US || ratio < SERVO_MIN_PULSEWIDTH_US){
-            
-            return;
-        }
+        ratio = (ratio - 0) * (MOTORS_MAX_SPEED - MOTORS_MIN_SPEED) / (65535 - 0) + MOTORS_MIN_SPEED; //maps value to Us to use in changing speed - max in is 65535 and min is 0 mapping to 1125 and 1500
         
         ESP_ERROR_CHECK(mcpwm_set_duty_in_us(MOT_UNIT[id], MOT_TIMER[id], MCPWM_OPR_A, ratio));
-        motor_ratios[id] = ratio;
+        motor_ratios[id] = ithrust;
 #ifdef DEBUG_EP2
         DEBUG_PRINT_LOCAL("motors ID = %d ,ithrust_10bit = %d", id, (uint32_t)motorsConv16ToBits(ratio));
 #endif

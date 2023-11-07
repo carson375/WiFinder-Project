@@ -54,7 +54,7 @@ static struct {
 } motorPowerSet;
 
 #ifndef DEFAULT_IDLE_THRUST
-#define DEFAULT_IDLE_THRUST 0
+#define DEFAULT_IDLE_THRUST 1400
 #endif
 
 static uint32_t idleThrust = DEFAULT_IDLE_THRUST; 
@@ -131,10 +131,10 @@ void powerDistribution(const control_t *control)
     motorsSetRatio(MOTOR_M2, motorPower.m2);
     motorsSetRatio(MOTOR_M3, motorPower.m3);
     motorsSetRatio(MOTOR_M4, motorPower.m4);
-    DEBUG_PRINT_LOCAL("value = %d id = 1", motorPower.m1);
+    /*DEBUG_PRINT_LOCAL("value = %d id = 1", motorPower.m1);
     DEBUG_PRINT_LOCAL("value = %d id = 2", motorPower.m2);
     DEBUG_PRINT_LOCAL("value = %d id = 3", motorPower.m3);
-    DEBUG_PRINT_LOCAL("value = %d id = 4", motorPower.m4);
+    DEBUG_PRINT_LOCAL("value = %d id = 4", motorPower.m4);*/
   }
 }
 

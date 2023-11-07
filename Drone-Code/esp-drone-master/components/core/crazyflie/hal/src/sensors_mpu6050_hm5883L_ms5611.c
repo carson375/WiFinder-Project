@@ -621,6 +621,7 @@ static void sensorsTaskInit(void)
 
   STATIC_MEM_TASK_CREATE(sensorsTask, sensorsTask, SENSORS_TASK_NAME, NULL, SENSORS_TASK_PRI);
   DEBUG_PRINTD("xTaskCreate sensorsTask \n");
+  DEBUG_PRINT_LOCAL("IN SENSORS_MPU_HM_MS CREATING SENSORS TASK");
 }
 
 static void IRAM_ATTR sensors_inta_isr_handler(void *arg)
@@ -817,7 +818,7 @@ static bool processGyroBias(int16_t gx, int16_t gy, int16_t gz, Axis3f *gyroBias
     gyroBiasOut->x = gyroBiasRunning.bias.x;
     gyroBiasOut->y = gyroBiasRunning.bias.y;
     gyroBiasOut->z = gyroBiasRunning.bias.z;
-
+    
     return gyroBiasRunning.isBiasValueFound;
 }
 #endif
