@@ -52,4 +52,12 @@ bool wifiGetDataBlocking(UDPPacket *in);
  */
 bool wifiSendData(uint32_t size, uint8_t* data);
 
+/**
+ * Get strength of STA wifi connection
+ * Returns int value of wifi strength - 
+ *
+ * @note returns -1000 if wifi is disconnected
+ */
+int getWifiStrength();
+
 #endif

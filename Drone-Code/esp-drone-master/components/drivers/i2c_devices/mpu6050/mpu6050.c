@@ -2154,7 +2154,7 @@ void mpu6050GetMotion6(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx, int16
     *gx = (((int16_t) buffer[8]) << 8) | buffer[9];
     *gy = (((int16_t) buffer[10]) << 8) | buffer[11];
     *gz = (((int16_t) buffer[12]) << 8) | buffer[13];
-    DEBUG_PRINT_LOCAL("accel x = %u accel y = %u accel z= %u gyro x = %u gyro y = %u gyro x = %u", *ax, *ay, *az, *gx, *gy, *gx);
+    DEBUG_PRINT_LOCAL("accel x = %u accel y = %u accel z= %u gyro x = %u gyro y = %u gyro z = %u", *ax, *ay, *az, *gx, *gy, *gx);
 }
 /** Get 3-axis accelerometer readings.
  * These registers store the most recent accelerometer measurements.
