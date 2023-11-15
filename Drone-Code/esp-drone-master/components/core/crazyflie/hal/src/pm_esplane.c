@@ -116,7 +116,7 @@ void pmInit(void)
   if(isInit) {
     return;
   }
-
+    
     pmEnableExtBatteryVoltMeasuring(CONFIG_ADC1_PIN, 2); // ADC1 PIN is fixed to ADC channel
 
     pmSyslinkInfo.pgood = false;
@@ -139,7 +139,7 @@ bool pmTest(void)
  */
 static void pmSetBatteryVoltage(float voltage)
 {
-  batteryVoltage = voltage;
+  batteryVoltage = 4;//voltage;
   batteryVoltageMV = (uint16_t)(voltage * 1000);
   if (batteryVoltageMax < voltage)
   {
@@ -168,7 +168,7 @@ static void pmSystemShutdown(void)
 static int32_t pmBatteryChargeFromVoltage(float voltage)
 {
   int charge = 0;
-
+ 
   if (voltage < bat671723HS25C[0])
   {
     return 0;

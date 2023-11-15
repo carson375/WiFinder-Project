@@ -50,6 +50,7 @@
 //#include "uart1.h"
 //#include "uart2.h"
 #include "wifi_esp32.h"
+#include "gps_spiffs.h"
 #include "comm.h"
 #include "stabilizer.h"
 #include "commander.h"
@@ -141,6 +142,7 @@ void systemInit(void)
   ledseqInit();
   pmInit();
   buzzerInit();
+  
 //  peerLocalizationInit();
 
 #ifdef APP_ENABLED
@@ -173,7 +175,7 @@ void systemTask(void *arg)
   ledSet(CHG_LED, 1);
   wifiInit();
   vTaskDelay(M2T(500));
-
+  gps_spiffs_init();
 #ifdef DEBUG_QUEUE_MONITOR
   queueMonitorInit();
 #endif

@@ -55,7 +55,7 @@ void mpu6050Init(I2C_Dev *i2cPort)
     I2Cx = i2cPort;
     devAddr = MPU6050_ADDRESS_AD0_LOW;
     isInit = true;
-
+    DEBUG_PRINT_LOCAL("mpu6050 is setup \n");
 }
 
 bool mpu6050Test(void)
@@ -2128,6 +2128,7 @@ bool mpu6050GetIntDataReadyStatus()
 void mpu6050GetMotion9(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx, int16_t *gy, int16_t *gz,
                        int16_t *mx, int16_t *my, int16_t *mz)
 {
+    DEBUG_PRINT_LOCAL("IN GET MOTION 9");
     mpu6050GetMotion6(ax, ay, az, gx, gy, gz);
     // TODO: magnetometer integration
 }
@@ -2145,6 +2146,7 @@ void mpu6050GetMotion9(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx, int16
  */
 void mpu6050GetMotion6(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx, int16_t *gy, int16_t *gz)
 {
+    DEBUG_PRINT_LOCAL("IN GET MOTION 6");
     i2cdevReadReg8(I2Cx, devAddr, MPU6050_RA_ACCEL_XOUT_H, 14, buffer);
     *ax = (((int16_t) buffer[0]) << 8) | buffer[1];
     *ay = (((int16_t) buffer[2]) << 8) | buffer[3];
@@ -2152,6 +2154,7 @@ void mpu6050GetMotion6(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx, int16
     *gx = (((int16_t) buffer[8]) << 8) | buffer[9];
     *gy = (((int16_t) buffer[10]) << 8) | buffer[11];
     *gz = (((int16_t) buffer[12]) << 8) | buffer[13];
+    DEBUG_PRINT_LOCAL("accel x = %u accel y = %u accel z= %u gyro x = %u gyro y = %u gyro z = %u", *ax, *ay, *az, *gx, *gy, *gx);
 }
 /** Get 3-axis accelerometer readings.
  * These registers store the most recent accelerometer measurements.
@@ -2191,6 +2194,7 @@ void mpu6050GetMotion6(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx, int16
  */
 void mpu6050GetAcceleration(int16_t *x, int16_t *y, int16_t *z)
 {
+    DEBUG_PRINT_LOCAL("IN GET ACCELERATION");
     i2cdevReadReg8(I2Cx, devAddr, MPU6050_RA_ACCEL_XOUT_H, 6, buffer);
     *x = (((int16_t) buffer[0]) << 8) | buffer[1];
     *y = (((int16_t) buffer[2]) << 8) | buffer[3];
@@ -2275,6 +2279,7 @@ int16_t mpu6050GetTemperature()
  */
 void mpu6050GetRotation(int16_t *x, int16_t *y, int16_t *z)
 {
+    DEBUG_PRINT_LOCAL("IN GET ROTATION");
     i2cdevReadReg8(I2Cx, devAddr, MPU6050_RA_GYRO_XOUT_H, 6, buffer);
     *x = (((int16_t) buffer[0]) << 8) | buffer[1];
     *y = (((int16_t) buffer[2]) << 8) | buffer[3];
@@ -2423,6 +2428,7 @@ uint32_t mpu6050GetExternalSensorDWord(int position)
  */
 bool mpu6050GetXNegMotionDetected()
 {
+    DEBUG_PRINT_LOCAL("IN GET X NEG MOTION DETECTED");
     i2cdevReadBit(I2Cx, devAddr, MPU6050_RA_MOT_DETECT_STATUS, MPU6050_MOTION_MOT_XNEG_BIT, buffer);
     return buffer[0];
 }
@@ -2433,6 +2439,7 @@ bool mpu6050GetXNegMotionDetected()
  */
 bool mpu6050GetXPosMotionDetected()
 {
+    DEBUG_PRINT_LOCAL("IN GET X POS MOTION DETECTED");
     i2cdevReadBit(I2Cx, devAddr, MPU6050_RA_MOT_DETECT_STATUS, MPU6050_MOTION_MOT_XPOS_BIT, buffer);
     return buffer[0];
 }
@@ -2483,6 +2490,7 @@ bool mpu6050GetZPosMotionDetected()
  */
 bool mpu6050GetZeroMotionDetected()
 {
+    DEBUG_PRINT_LOCAL("IN GET ZERO MOTION DETECTED");
     i2cdevReadBit(I2Cx, devAddr, MPU6050_RA_MOT_DETECT_STATUS, MPU6050_MOTION_MOT_ZRMOT_BIT, buffer);
     return buffer[0];
 }
