@@ -9,6 +9,7 @@ import FlightPath from "../components/FlightPath";
 import { useState, useRef, useEffect } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import { JsonArray, download } from "json-to-csv-in-browser";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#999999",
@@ -32,7 +33,7 @@ mapboxgl.accessToken =
   "pk.eyJ1IjoiY2Fyc29uMzc1IiwiYSI6ImNsbHdsdGxqdjB0MnUzcG9iYmlucjZmbDQifQ.-tQZS7qUZJNMIiLm_kD0rA";
 
 const flightPathPageMessage =
-  "Welcome to the Flight Path Page! Enter your desired flight path into the interactive map below, using the path button. Add barriers and checkpoints to make your path more accurate, and once you are finished click the submit button. If there are any mistakes click the clear button to restart. Once the path has been submitted turn your drone on outdoors and watch the drone follow the path.";
+  "Welcome to the Flight Path Page! Enter your desired flight path into the interactive map below. Add barriers and checkpoints to make your path more accurate, and once you are finished click the path button to generate a flight path CSV. If there are any mistakes click the clear button to restart. Once the path has been submitted turn your drone on outdoors and watch the drone follow the path.";
 
 const FlightPathPage = () => {
   const navigate = useRouter();
@@ -41,8 +42,8 @@ const FlightPathPage = () => {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [clear, setClear] = useState(false);
-  const [lng, setLng] = useState(-83.0124);
-  const [lat, setLat] = useState(39.9991);
+  const [lng, setLng] = useState(-83.01243);
+  const [lat, setLat] = useState(39.99913);
   const [zoom, setZoom] = useState(12.12);
   // @ts-ignore
   var currentMarkers = [];
@@ -59,8 +60,8 @@ const FlightPathPage = () => {
     // @ts-ignore: Object is possibly 'null'.
     map.current.on("move", () => {
       // @ts-ignore: Object is possibly 'null'.
-      setLng(map.current.getCenter().lng.toFixed(4)); // @ts-ignore: Object is possibly 'null'.
-      setLat(map.current.getCenter().lat.toFixed(4)); // @ts-ignore: Object is possibly 'null'.
+      setLng(map.current.getCenter().lng.toFixed(5)); // @ts-ignore: Object is possibly 'null'.
+      setLat(map.current.getCenter().lat.toFixed(5)); // @ts-ignore: Object is possibly 'null'.
       setZoom(map.current.getZoom().toFixed(2));
     });
   });
@@ -77,11 +78,23 @@ const FlightPathPage = () => {
     currentMarkers.push(marker);
   };
 
-  const clearAllMarkers = () => {
-    for (var i = currentMarkers.length - 1; i >= 0; i--) {
-      // @ts-ignore
-      currentMarkers[i].remove();
-    }
+  const onDownloadHandler = () => {
+    let dataArray = [];
+    checkpoints.map((item) =>
+      dataArray.push({
+        "Checkpoints Longitude": item[0],
+        "Checkpoints Latitude": item[1],
+      })
+    );
+    barriers.map((item) =>
+      dataArray.push({
+        "Barriers Longitude": item[0],
+        "Barriers Latitude": item[1],
+      })
+    );
+    const jsonArray = new JsonArray(dataArray);
+    const str = jsonArray.convertToCSVstring();
+    download(`flightPathPoints.csv`, str);
   };
 
   return (
@@ -125,13 +138,13 @@ const FlightPathPage = () => {
             <Button
               variant="contained"
               onClick={() => {
-                console.log("Path Button Clicked");
+                onDownloadHandler();
               }}
             >
               Path
             </Button>
           </Grid>
-          <Grid item xs={2} md={7.05}></Grid>
+          <Grid item xs={2} md={7.95}></Grid>
           <Grid item xs={2} md={0.8}>
             <Button
               variant="contained"
@@ -140,18 +153,6 @@ const FlightPathPage = () => {
               }}
             >
               Clear
-            </Button>
-          </Grid>
-          <Grid item xs={2} md={0.5}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                console.log(checkpoints);
-                console.log(barriers);
-                navigate.push("/");
-              }}
-            >
-              Submit
             </Button>
           </Grid>
         </Grid>

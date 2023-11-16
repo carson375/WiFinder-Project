@@ -1,7 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { Button, Box, Paper, Grid, Typography } from "@mui/material";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
