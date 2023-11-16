@@ -34,7 +34,7 @@
 #define UDP_SERVER_BUFSIZE      128
 
 static struct sockaddr_in6 source_addr; // Large enough for both IPv4 or IPv6
-static const char *TAG = "Simple Prototype";
+static const char *TAG = "WIFI";
 
 #define TIME_ZONE (+0)  
 #define YEAR_BASE (2000) //date in GPS starts from 2000

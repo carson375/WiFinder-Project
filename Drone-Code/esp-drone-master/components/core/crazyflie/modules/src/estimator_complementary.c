@@ -36,12 +36,14 @@
 #include "sensors.h"
 #include "stabilizer_types.h"
 #include "static_mem.h"
-
+#include "log.h"
+#include "debug_cf.h"
 #define ATTITUDE_UPDATE_RATE RATE_250_HZ
 #define ATTITUDE_UPDATE_DT 1.0/ATTITUDE_UPDATE_RATE
 
 #define POS_UPDATE_RATE RATE_100_HZ
 #define POS_UPDATE_DT 1.0/POS_UPDATE_RATE
+static const char *TAG = "Estimator Complementary";
 
 static bool latestTofMeasurement(tofMeasurement_t* tofMeasurement);
 
@@ -70,14 +72,16 @@ bool estimatorComplementaryTest(void)
 void estimatorComplementary(state_t *state, sensorData_t *sensorData, control_t *control, const uint32_t tick)
 {
   sensorsAcquire(sensorData, tick); // Read sensors at full rate (1000Hz)
+  
   if (RATE_DO_EXECUTE(ATTITUDE_UPDATE_RATE, tick)) {
     sensfusion6UpdateQ(sensorData->gyro.x, sensorData->gyro.y, sensorData->gyro.z,
                        sensorData->acc.x, sensorData->acc.y, sensorData->acc.z,
                        ATTITUDE_UPDATE_DT);
-
+    //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f,  %.05f,  %.05f,  %.05f ", sensorData->acc.x, sensorData->acc.y, sensorData->acc.z, sensorData->gyro.x, sensorData->gyro.y, sensorData->gyro.z);
     // Save attitude, adjusted for the legacy CF2 body coordinate system
+    //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f", state->attitude.roll, state->attitude.pitch, state->attitude.yaw);
     sensfusion6GetEulerRPY(&state->attitude.roll, &state->attitude.pitch, &state->attitude.yaw);
-
+    
     // Save quaternion, hopefully one day this could be used in a better controller.
     // Note that this is not adjusted for the legacy coordinate system
     sensfusion6GetQuaternion(
@@ -99,6 +103,7 @@ void estimatorComplementary(state_t *state, sensorData_t *sensorData, control_t 
     latestTofMeasurement(&tofMeasurement);
     positionEstimate(state, sensorData, &tofMeasurement, POS_UPDATE_DT, tick);
   }
+  //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f,  %.05f,  %.05f,  %.05f, %.05f,  %.05f,  %.05f", state->acc.x, state->acc.y, state->acc.z, state->velocity.x, state->velocity.y, state->velocity.z, state->position.x, state->position.y, state->position.z);
 }
 
 static bool latestTofMeasurement(tofMeasurement_t* tofMeasurement) {

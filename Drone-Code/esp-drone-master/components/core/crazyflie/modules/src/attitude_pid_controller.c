@@ -31,12 +31,12 @@
 #include "pid.h"
 #include "param.h"
 #include "log.h"
-
+#include "debug_cf.h"
 #define ATTITUDE_LPF_CUTOFF_FREQ      15.0f
 #define ATTITUDE_LPF_ENABLE false
 #define ATTITUDE_RATE_LPF_CUTOFF_FREQ 30.0f
 #define ATTITUDE_RATE_LPF_ENABLE false
-
+static const char *TAG = "ATT_PID";
 
 static inline int16_t saturateSignedInt16(float in)
 {
@@ -67,7 +67,7 @@ void attitudeControllerInit(const float updateDt)
   if(isInit)
     return;
 
-  //TODO: get parameters from configuration manager instead
+  //
   pidInit(&pidRollRate,  0, PID_ROLL_RATE_KP,  PID_ROLL_RATE_KI,  PID_ROLL_RATE_KD,
       updateDt, ATTITUDE_RATE, ATTITUDE_RATE_LPF_CUTOFF_FREQ, ATTITUDE_RATE_LPF_ENABLE);
   pidInit(&pidPitchRate, 0, PID_PITCH_RATE_KP, PID_PITCH_RATE_KI, PID_PITCH_RATE_KD,
@@ -102,6 +102,7 @@ void attitudeControllerCorrectRatePID(
        float rollRateActual, float pitchRateActual, float yawRateActual,
        float rollRateDesired, float pitchRateDesired, float yawRateDesired)
 {
+  //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f,  %.05f,  %.05f,  %.05f ", rollRateActual, rollRateDesired, pitchRateActual, pitchRateDesired, yawRateActual, yawRateDesired);
   pidSetDesired(&pidRollRate, rollRateDesired);
   rollOutput = saturateSignedInt16(pidUpdate(&pidRollRate, rollRateActual, true));
 

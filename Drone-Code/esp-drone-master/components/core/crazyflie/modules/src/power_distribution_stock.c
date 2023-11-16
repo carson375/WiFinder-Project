@@ -38,7 +38,7 @@
 #include "debug_cf.h"
 
 static bool motorSetEnable = false;
-
+static const char *TAG = "Power Dis";
 static struct {
   uint32_t m1;
   uint32_t m2;
@@ -54,7 +54,7 @@ static struct {
 } motorPowerSet;
 
 #ifndef DEFAULT_IDLE_THRUST
-#define DEFAULT_IDLE_THRUST 1400
+#define DEFAULT_IDLE_THRUST 0
 #endif
 
 static uint32_t idleThrust = DEFAULT_IDLE_THRUST; 
@@ -86,6 +86,7 @@ void powerStop()
 void powerDistribution(const control_t *control)
 {
   #ifdef QUAD_FORMATION_X
+    //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f,  %.05f ", (float)control->roll, (float)control->pitch, (float)control->yaw, (float)control->thrust);
     int16_t r = control->roll / 2.0f;
     int16_t p = control->pitch / 2.0f;
     motorPower.m1 = limitThrust(control->thrust - r + p + control->yaw);
@@ -131,10 +132,7 @@ void powerDistribution(const control_t *control)
     motorsSetRatio(MOTOR_M2, motorPower.m2);
     motorsSetRatio(MOTOR_M3, motorPower.m3);
     motorsSetRatio(MOTOR_M4, motorPower.m4);
-    /*DEBUG_PRINT_LOCAL("value = %d id = 1", motorPower.m1);
-    DEBUG_PRINT_LOCAL("value = %d id = 2", motorPower.m2);
-    DEBUG_PRINT_LOCAL("value = %d id = 3", motorPower.m3);
-    DEBUG_PRINT_LOCAL("value = %d id = 4", motorPower.m4);*/
+    //ESP_LOGI(TAG, "%d,  %d,  %d,  %d ", motorPower.m1, motorPower.m2, motorPower.m3, motorPower.m4);
   }
 }
 

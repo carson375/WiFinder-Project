@@ -54,7 +54,7 @@
 #include "debug_cf.h"
 #include "static_mem.h"
 #include "rateSupervisor.h"
-
+static const char *TAG = "Stabilizer";
 static bool isInit;
 static bool emergencyStop = false;
 static int emergencyStopTimeout = EMERGENCY_STOP_TIMEOUT_DISABLED;
@@ -284,25 +284,25 @@ static void stabilizerTask(void* param)
         stateEstimatorSwitchTo(estimatorType);
         estimatorType = getStateEstimator();
       }
+
       // allow to update controller dynamically
       if (getControllerType() != controllerType) {
         controllerInit(controllerType);
         controllerType = getControllerType();
       }
-
       stateEstimator(&state, &sensorData, &control, tick);
       compressState();
 
       commanderGetSetpoint(&setpoint, &state);
       compressSetpoint();
-
-      sitAwUpdateSetpoint(&setpoint, &sensorData, &state);
+      
+      //sitAwUpdateSetpoint(&setpoint, &sensorData, &state);
       //collisionAvoidanceUpdateSetpoint(&setpoint, &sensorData, &state, tick);
 
       controller(&control, &setpoint, &sensorData, &state, tick);
-
+      //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f,  %.05f,  %.05f,  %.05f ", sensorData.acc.x, sensorData.acc.y, sensorData.acc.z, sensorData.gyro.x, sensorData.gyro.y, sensorData.gyro.z);
       checkEmergencyStopTimeout();
-
+    
       checkStops = systemIsArmed();
       if (emergencyStop || (systemIsArmed() == false)) {
         powerStop();

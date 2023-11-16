@@ -27,7 +27,7 @@
 #include "wifi_esp32.h"
 static const char *TAG = "GPS/SPIFFS";
 static bool isInit = false;
-#define TIME_ZONE (+0)  
+#define TIME_ZONE (+10)  
 #define YEAR_BASE (2000) //date in GPS starts from 2000
 
 /**
@@ -61,8 +61,8 @@ static void gps_event_handler(void *event_handler_arg, esp_event_base_t event_ba
             ESP_LOGE(TAG, "Failed to open file for writing");
         }
         else{
-            ESP_LOGI(TAG,"%d  %.05f   %.05f \n", wifiStrength, gps->latitude, gps->longitude);
-            fprintf(f, "%d  %.05f   %.05f \n", wifiStrength, gps->latitude, gps->longitude);
+            ESP_LOGI(TAG,"%.05f, %.05f, %d\n", gps->longitude, gps->latitude, wifiStrength);
+            fprintf(f, "%.05f,  %.05f, %d\n", gps->longitude, gps->latitude, wifiStrength);
         }
         fclose(f);
         break;
@@ -92,11 +92,11 @@ void gps_spiffs_init(void)
 
     //GPS START
     /* NMEA parser configuration */
-    nmea_parser_config_t config = NMEA_PARSER_CONFIG_DEFAULT();
+    //nmea_parser_config_t config = NMEA_PARSER_CONFIG_DEFAULT();
     /* init NMEA parser library */
-    nmea_parser_handle_t nmea_hdl = nmea_parser_init(&config);
+    //nmea_parser_handle_t nmea_hdl = nmea_parser_init(&config);
     /* register event handler for NMEA parser library */
-    nmea_parser_add_handler(nmea_hdl, gps_event_handler, NULL);
+    //nmea_parser_add_handler(nmea_hdl, gps_event_handler, NULL);
 
     ESP_LOGI(TAG, "Initializing SPIFFS");
 
@@ -106,8 +106,8 @@ void gps_spiffs_init(void)
       .max_files = 5,
       .format_if_mount_failed = true
     };
-    // Use settings defined above to initialize and mount SPIFFS filesystem.
-    // Note: esp_vfs_spiffs_register is an all-in-one convenience function.
+    // Use settings defined above to initialize and mount SPIFFS filesystem. 
+    // Note: esp_vfs_spiffs_register is an all-in-one convenience function.  
     esp_err_t ret = esp_vfs_spiffs_register(&conf);
     if (ret != ESP_OK) {
         if (ret == ESP_FAIL) {
@@ -166,7 +166,7 @@ void gps_spiffs_init(void)
 
     }
     else{
-        fprintf(f, "Wi-Fi   Latitude     Longitude\n");
+        fprintf(f, "Longitude  Latitude  Wi-Fi\n");
     }
     fclose(f);
     return;

@@ -73,7 +73,7 @@
 #define MOTORS_TEST_DELAY_TIME_MS 150
 
 #define MOTORS_MAX_SPEED 2000
-#define MOTORS_MIN_SPEED 1000
+#define MOTORS_MIN_SPEED 1100
 // Sound defines
 /*#define C4    262
 #define DES4  277

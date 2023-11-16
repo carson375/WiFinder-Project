@@ -75,7 +75,7 @@
 //#define GYRO_ADD_RAW_AND_VARIANCE_LOG_VALUES
 
 #define MAG_GAUSS_PER_LSB 666.7f
-
+static const char *TAG = "Sensors_mpu6050";
 /**
  * Enable sensors on board 
  */
@@ -111,7 +111,7 @@
 // Number of samples used in variance calculation. Changing this effects the threshold
 #define SENSORS_NBR_OF_BIAS_SAMPLES 1024
 // Variance threshold to take zero bias for gyro
-#define GYRO_VARIANCE_BASE 5000
+#define GYRO_VARIANCE_BASE 80000
 #define GYRO_VARIANCE_THRESHOLD_X (GYRO_VARIANCE_BASE)
 #define GYRO_VARIANCE_THRESHOLD_Y (GYRO_VARIANCE_BASE)
 #define GYRO_VARIANCE_THRESHOLD_Z (GYRO_VARIANCE_BASE)
@@ -156,7 +156,10 @@ static Axis3f gyroBiasStdDev;
 static bool gyroBiasFound = false;
 static float accScaleSum = 0;
 static float accScale = 1;
-
+static float accBiasX = 0;
+static float accBiasY = 0;
+static float accBiasZ = 0;
+static bool accBias = false;
 // Low Pass filtering
 #define GYRO_LPF_CUTOFF_FREQ 80
 #define ACCEL_LPF_CUTOFF_FREQ 30
@@ -208,7 +211,7 @@ static void sensorsCalculateVarianceAndMean(BiasObj *bias, Axis3f *varOut, Axis3
 static void sensorsCalculateBiasMean(BiasObj *bias, Axis3i32 *meanOut);
 static void sensorsAddBiasValue(BiasObj *bias, int16_t x, int16_t y, int16_t z);
 static bool sensorsFindBiasValue(BiasObj *bias);
-static void sensorsAccAlignToGravity(Axis3f *in, Axis3f *out);
+static void sensorsAccAlignToGravity();
 
 STATIC_MEM_TASK_ALLOC(sensorsTask, SENSORS_TASK_STACKSIZE);
 bool sensorsMpu6050Hmc5883lMs5611ReadGyro(Axis3f *gyro)
@@ -372,7 +375,7 @@ void processAccGyroMeasurements(const uint8_t *buffer)
     if (gyroBiasFound) {
         processAccScale(accelRaw.x, accelRaw.y, accelRaw.z);
     }
-
+    //ESP_LOGI
     /* sensors step 2.4 convert  digtal value to physical angle */
 #ifdef CONFIG_TARGET_ESPLANE_V1
     sensorData.gyro.x = (gyroRaw.x - gyroBias.x) * SENSORS_DEG_PER_LSB_CFG;
@@ -384,18 +387,22 @@ void processAccGyroMeasurements(const uint8_t *buffer)
     sensorData.gyro.z = (gyroRaw.z - gyroBias.z) * SENSORS_DEG_PER_LSB_CFG;
     /* sensors step 2.5 low pass filter */
     applyAxis3fLpf((lpf2pData *)(&gyroLpf), &sensorData.gyro);
-
+    
 #ifdef CONFIG_TARGET_ESPLANE_V1
     accScaled.x = (accelRaw.x) * SENSORS_G_PER_LSB_CFG / accScale;
 #else
-    accScaled.x = -(accelRaw.x) * SENSORS_G_PER_LSB_CFG / accScale;   
+    sensorData.acc.x = -(accelRaw.x - accBiasX) * SENSORS_G_PER_LSB_CFG;   
 #endif
 
-    accScaled.y = (accelRaw.y) * SENSORS_G_PER_LSB_CFG / accScale;
-    accScaled.z = (accelRaw.z) * SENSORS_G_PER_LSB_CFG / accScale;
+    sensorData.acc.y  = (accelRaw.y - accBiasY) * SENSORS_G_PER_LSB_CFG;
+    sensorData.acc.z  = (accelRaw.z - accBiasZ) * SENSORS_G_PER_LSB_CFG;
 
     /* sensors step 2.6 Compensate for a miss-aligned accelerometer. */
-    sensorsAccAlignToGravity(&accScaled, &sensorData.acc);
+    if(!accBias){
+        sensorsAccAlignToGravity();
+    }
+    //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f", (float)accelRaw.x,(float)accelRaw.y,(float)accelRaw.z);
+    //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f", accScaled.x, accScaled.y, accScaled.z);
     applyAxis3fLpf((lpf2pData *)(&accLpf), &sensorData.acc);
 }
 static void sensorsDeviceInit(void)
@@ -545,6 +552,8 @@ static void sensorsDeviceInit(void)
     sinPitch = sinf(PITCH_CALIB * (float)M_PI / 180);
     cosRoll = cosf(ROLL_CALIB * (float)M_PI / 180);
     sinRoll = sinf(ROLL_CALIB * (float)M_PI / 180);
+
+    
     DEBUG_PRINTI("pitch_calib = %f,roll_calib = %f",PITCH_CALIB,ROLL_CALIB);
 }
 
@@ -818,7 +827,9 @@ static bool processGyroBias(int16_t gx, int16_t gy, int16_t gz, Axis3f *gyroBias
     gyroBiasOut->x = gyroBiasRunning.bias.x;
     gyroBiasOut->y = gyroBiasRunning.bias.y;
     gyroBiasOut->z = gyroBiasRunning.bias.z;
-    
+    //ESP_LOGI(TAG, "%.05f, %.05f, %.05f, %.05f", sinRoll, cosRoll, sinPitch, cosPitch);
+    //ESP_LOGI(TAG, "%d", gyroBiasRunning.isBiasValueFound);
+    //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f,", gyroBiasOut->x, gyroBiasOut->y, gyroBiasOut->z);
     return gyroBiasRunning.isBiasValueFound;
 }
 #endif
@@ -837,7 +848,7 @@ static void sensorsCalculateVarianceAndMean(BiasObj *bias, Axis3f *varOut, Axis3
     uint32_t i;
     int64_t sum[GYRO_NBR_OF_AXES] = {0};
     int64_t sumSq[GYRO_NBR_OF_AXES] = {0};
-
+    
     for (i = 0; i < SENSORS_NBR_OF_BIAS_SAMPLES; i++) {
         sum[0] += bias->buffer[i].x;
         sum[1] += bias->buffer[i].y;
@@ -846,7 +857,6 @@ static void sensorsCalculateVarianceAndMean(BiasObj *bias, Axis3f *varOut, Axis3
         sumSq[1] += bias->buffer[i].y * bias->buffer[i].y;
         sumSq[2] += bias->buffer[i].z * bias->buffer[i].z;
     }
-
     varOut->x = (sumSq[0] - ((int64_t)sum[0] * sum[0]) / SENSORS_NBR_OF_BIAS_SAMPLES);
     varOut->y = (sumSq[1] - ((int64_t)sum[1] * sum[1]) / SENSORS_NBR_OF_BIAS_SAMPLES);
     varOut->z = (sumSq[2] - ((int64_t)sum[2] * sum[2]) / SENSORS_NBR_OF_BIAS_SAMPLES);
@@ -854,6 +864,7 @@ static void sensorsCalculateVarianceAndMean(BiasObj *bias, Axis3f *varOut, Axis3
     meanOut->x = (float)sum[0] / SENSORS_NBR_OF_BIAS_SAMPLES;
     meanOut->y = (float)sum[1] / SENSORS_NBR_OF_BIAS_SAMPLES;
     meanOut->z = (float)sum[2] / SENSORS_NBR_OF_BIAS_SAMPLES;
+    //ESP_LOGI(TAG, "%d,  %d,  %d,", bias->buffer[0].x, bias->buffer[0].y, bias->buffer[0].z);
 }
 
 /**
@@ -901,10 +912,10 @@ static bool sensorsFindBiasValue(BiasObj *bias)
 {
     static int32_t varianceSampleTime;
     bool foundBias = false;
-
+    //ESP_LOGI(TAG, "%d", bias->isBufferFilled);
     if (bias->isBufferFilled) {
         sensorsCalculateVarianceAndMean(bias, &bias->variance, &bias->mean);
-
+        //ESP_LOGI(TAG, "%05f, %05f, %05f", bias->variance.x, bias->variance.y, bias->variance.z);
         if (bias->variance.x < GYRO_VARIANCE_THRESHOLD_X &&
                 bias->variance.y < GYRO_VARIANCE_THRESHOLD_Y &&
                 bias->variance.z < GYRO_VARIANCE_THRESHOLD_Z &&
@@ -915,6 +926,7 @@ static bool sensorsFindBiasValue(BiasObj *bias)
             bias->bias.z = bias->mean.z;
             foundBias = true;
             bias->isBiasValueFound = true;
+            //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f,  %.05f,  %.05f,  %.05f ", bias->bias.x, sensorData->acc.y, sensorData->acc.z, sensorData->gyro.x, sensorData->gyro.y, sensorData->gyro.z);
         }
     }
 
@@ -975,24 +987,19 @@ bool sensorsMpu6050Hmc5883lMs5611ManufacturingTest(void)
  * data gathered from the UI and written in the config-block to
  * rotate the accelerometer to be aligned with gravity.
  */
-static void sensorsAccAlignToGravity(Axis3f *in, Axis3f *out)
+static void sensorsAccAlignToGravity()
 {
-    Axis3f rx;
-    Axis3f ry;
-
-    // Rotate around x-axis
-    rx.x = in->x;
-    rx.y = in->y * cosRoll - in->z * sinRoll;
-    rx.z = in->y * sinRoll + in->z * cosRoll;
-
-    // Rotate around y-axis
-    ry.x = rx.x * cosPitch - rx.z * sinPitch;
-    ry.y = rx.y;
-    ry.z = -rx.x * sinPitch + rx.z * cosPitch;
-
-    out->x = ry.x;
-    out->y = ry.y;
-    out->z = ry.z;
+    for (int i = 0; i < 500; i++) {
+        accelRaw.y = (((int16_t)buffer[0]) << 8) | buffer[1];
+        accelRaw.x = (((int16_t)buffer[2]) << 8) | buffer[3];
+        accelRaw.z = (((int16_t)buffer[4]) << 8) | buffer[5];
+        accBiasX += accelRaw.x; accBiasY += accelRaw.y; accBiasZ += accelRaw.z;
+    }
+    accBiasX = accBiasX / 500.0;
+    accBiasY = accBiasY / 500.0;
+    accBiasZ = (accBiasZ / 500.0) - 2048;
+    accBias = true;
+    ESP_LOGI(TAG, "%.05f, %.05f, %.05f", accBiasX, accBiasY, accBiasZ);
 }
 
 /** set different low pass filters in different environment

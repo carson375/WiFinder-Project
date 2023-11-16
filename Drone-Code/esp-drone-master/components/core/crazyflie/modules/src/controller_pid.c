@@ -11,7 +11,7 @@
 #include "debug_cf.h"
 #include "param.h"
 #include "math3d.h"
-
+static const char *TAG = "CONTROL_PID";
 #define ATTITUDE_UPDATE_DT    (float)(1.0f/ATTITUDE_RATE)
 
 static bool tiltCompensationEnabled = false;
@@ -88,11 +88,11 @@ void controllerPid(control_t *control, setpoint_t *setpoint,
       attitudeDesired.roll = setpoint->attitude.roll;
       attitudeDesired.pitch = setpoint->attitude.pitch;
     }
-
+    
     attitudeControllerCorrectAttitudePID(state->attitude.roll, state->attitude.pitch, state->attitude.yaw,
                                 attitudeDesired.roll, attitudeDesired.pitch, attitudeDesired.yaw,
                                 &rateDesired.roll, &rateDesired.pitch, &rateDesired.yaw);
-
+    //ESP_LOGI(TAG, "%.05f,  %.05f,  %.05f,  %.05f,  %.05f,  %.05f, %.05f,  %.05f,  %.05f", state->attitude.roll, attitudeDesired.roll, rateDesired.roll, state->attitude.pitch, attitudeDesired.pitch, rateDesired.pitch, state->attitude.yaw, attitudeDesired.yaw, rateDesired.yaw);
     // For roll and pitch, if velocity mode, overwrite rateDesired with the setpoint
     // value. Also reset the PID to avoid error buildup, which can lead to unstable
     // behavior if level mode is engaged later
@@ -109,9 +109,7 @@ void controllerPid(control_t *control, setpoint_t *setpoint,
     attitudeControllerCorrectRatePID(sensors->gyro.x, -sensors->gyro.y, sensors->gyro.z,
                              rateDesired.roll, rateDesired.pitch, rateDesired.yaw);
 
-    attitudeControllerGetActuatorOutput(&control->roll,
-                                        &control->pitch,
-                                        &control->yaw);
+    attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
 
     control->yaw = -control->yaw;
 
