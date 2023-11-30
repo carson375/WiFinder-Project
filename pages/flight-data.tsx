@@ -147,7 +147,11 @@ const FlightData: NextPage = () => {
           </Grid>
           <Grid item height={120}>
             <Typography color="black">Download Current Flight Data:</Typography>
-            <a href="https://172.20.10.9/FlightData.txt" target="_blank">
+            <a
+              href="https://172.20.10.9/FlightData.txt"
+              target="_blank"
+              rel="noreferrer"
+            >
               <Button
                 variant="contained"
                 style={{
