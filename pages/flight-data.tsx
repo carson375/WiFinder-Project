@@ -126,7 +126,7 @@ const FlightData: NextPage = () => {
           alignItems="center"
           direction="row"
         >
-          <Grid item height={120}>
+          <Grid item height={120} paddingRight={9}>
             <Typography color="black">Upload Flight Data:</Typography>
             <input type={"file"} accept={".csv"} onChange={onFileChange} />
             <Button
@@ -144,6 +144,22 @@ const FlightData: NextPage = () => {
               Upload
               <input type="file" hidden />
             </Button>
+          </Grid>
+          <Grid item height={120}>
+            <Typography color="black">Download Current Flight Data:</Typography>
+            <a href="https://172.20.10.9/FlightData.txt" target="_blank">
+              <Button
+                variant="contained"
+                style={{
+                  maxWidth: "220px",
+                  maxHeight: "56px",
+                  minWidth: "220px",
+                  minHeight: "56px",
+                }}
+              >
+                Download
+              </Button>
+            </a>
           </Grid>
         </Grid>
       </Box>

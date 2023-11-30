@@ -77,7 +77,6 @@ void app_main(void)
             ESP_LOGI(TAG, "SPIFFS_check() successful");
         }
     }
-
     FILE *file = fopen("/spiffs/FlightData.txt", "r");
     if(file ==NULL)
     {
