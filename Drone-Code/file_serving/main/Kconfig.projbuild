@@ -95,4 +95,6 @@ menu "HTTP file_serving example menu"
         help
             If this config item is set, Connection: close header will be set in handlers.
             This closes HTTP connection and frees the server socket instantly.
+            
+    
 endmenu

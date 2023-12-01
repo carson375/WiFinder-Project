@@ -479,7 +479,7 @@ esp_err_t example_start_file_server(const char *base_path)
         ESP_LOGE(TAG, "Failed to start file server!");
         return ESP_FAIL;
     }
-
+    ESP_LOGI(TAG, "Server Setup");    
     /* URI handler for getting uploaded files */
     httpd_uri_t file_download = {
         .uri       = "/*",  // Match all URIs of type /path/to/file
