@@ -35,11 +35,12 @@
  * Look in file_server.c for the implementation.
  */
 
-static const char *TAG = "example";
+static const char *TAG = "Main";
 #define EXAMPLE_ESP_WIFI_SSID      "ESP32WiFi"
 #define EXAMPLE_ESP_WIFI_PASS      "12345678"
 #define EXAMPLE_ESP_WIFI_CHANNEL   1
 #define EXAMPLE_MAX_STA_CONN       4
+#define DEFAULT_SCAN_LIST_SIZE CONFIG_EXAMPLE_SCAN_LIST_SIZE
 
 static void wifi_event_handler(void* arg, esp_event_base_t event_base,
                                     int32_t event_id, void* event_data)
@@ -55,13 +56,13 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
     }
 }
 
-void wifi_init_softap()
+void wifi_init_apsta()
 {
     
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
     esp_netif_create_default_wifi_ap();
-
+    esp_netif_create_default_wifi_sta();
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
 
@@ -81,19 +82,45 @@ void wifi_init_softap()
             .authmode = WIFI_AUTH_WPA_WPA2_PSK
         },
     };
+
+    /*wifi_config_t wifi_config_sta = {
+        .sta = {
+            .ssid = EXAMPLE_ESP_WIFI_SSID,
+            .password = EXAMPLE_ESP_WIFI_PASS,
+	     .threshold.authmode = ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD,
+	     .sae_pwe_h2e = WPA3_SAE_PWE_BOTH,
+        },
+    };*/
+
     if (strlen(EXAMPLE_ESP_WIFI_PASS) == 0) {
         wifi_config.ap.authmode = WIFI_AUTH_OPEN;
     }
 
-    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
+    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
+    //ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config_sta));
     ESP_ERROR_CHECK(esp_wifi_start());
 
     ESP_LOGI(TAG, "wifi_init_softap finished. SSID:%s password:%s channel:%d",
              EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS, EXAMPLE_ESP_WIFI_CHANNEL);
     return;
 }
+int getWifiStrength()
+{
+    uint16_t number = DEFAULT_SCAN_LIST_SIZE;
+    wifi_ap_record_t ap_info[DEFAULT_SCAN_LIST_SIZE];
+    uint16_t ap_count = 0;
+    memset(ap_info, 0, sizeof(ap_info));
 
+    esp_wifi_scan_start(NULL, true);
+    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_num(&ap_count));
+    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_records(&number, ap_info));
+    ESP_LOGI(TAG, "Total APs scanned = %u", ap_count);
+    for (int i = 0;(i<number) &&(i < ap_count); i++) {
+        ESP_LOGI(TAG, "SSID \t\t%s", ap_info[i].ssid);
+        ESP_LOGI(TAG, "RSSI \t\t%d", ap_info[i].rssi);
+    }
+}
 void app_main(void)
 {
     ESP_LOGI(TAG, "Starting example");
@@ -114,8 +141,8 @@ void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
 
-    ESP_LOGI(TAG, "ESP_WIFI_MODE_AP");
-    wifi_init_softap();
+    ESP_LOGI(TAG, "ESP_WIFI_MODE_APSTA");
+    wifi_init_apsta();
     
     //ESP_ERROR_CHECK(example_connect());
     ESP_LOGI(TAG, "Starting Server");
@@ -123,5 +150,7 @@ void app_main(void)
     ESP_ERROR_CHECK(example_start_file_server(base_path));
     ESP_LOGI(TAG, "File server started");
 
+    gps_spiffs_init();
+    
     
 }
